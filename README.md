@@ -1,5 +1,5 @@
 <img width="1920" height="1080" alt="{24788A88-EEF2-47FF-89A3-FBF49DBFC94E}" src="https://github.com/user-attachments/assets/306e67eb-011f-4d79-b9c8-8fb57a1a7c22" /># RD_inventory
-ESX/QB/QBX inventory with ox style red/black UI
+ESX/QB/QBX inventory red/black UI
 # RD_inventory FULL READY
 
 This is a working base inventory for FiveM ESX/QB/QBX with:
