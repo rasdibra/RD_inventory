@@ -1,0 +1,1 @@
+RDBridge = RDBridge or {}

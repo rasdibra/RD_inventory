@@ -1,0 +1,1544 @@
+:root {
+    --bg-opacity: .68;
+    --slot-size: 92px;
+    --slot-gap: 8px;
+    --slot-radius: 7px;
+    --rd-red: #ff3030;
+    --rd-border: rgba(255,35,35,.28);
+    --bag-opacity: .92;
+    --slot-dark: .96;
+}
+
+* { box-sizing: border-box; user-select: none; }
+body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; color: #eee; background: transparent; }
+.hidden { display: none !important; }
+
+#app {
+    width: 100vw; height: 100vh;
+    background: radial-gradient(circle at center, rgba(130,0,0,.22), transparent 45%), rgba(0,0,0,var(--bg-opacity));
+    display: flex; align-items: center; justify-content: center;
+}
+
+.inventory-shell {
+    width: 1180px;
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    gap: 18px;
+    align-items: center;
+}
+
+.panel {
+    background: rgba(10,10,12,var(--bag-opacity));
+    border: 1px solid var(--rd-border);
+    border-radius: 14px;
+    box-shadow: 0 0 42px rgba(0,0,0,.8), inset 0 0 18px rgba(255,0,0,.04);
+    padding: 16px;
+}
+
+.panel-header { margin-bottom: 14px; }
+.panel-header h1 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    color: var(--rd-red);
+    text-shadow: 0 0 10px rgba(255,0,0,.45);
+}
+.panel-header p { margin: 5px 0 9px; font-size: 12px; color: #aaa; }
+
+.weight-bar { width: 100%; height: 7px; background: rgba(255,255,255,.06); border-radius: 99px; overflow: hidden; }
+.weight-bar span { display: block; height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, #720000, var(--rd-red)); box-shadow: 0 0 14px rgba(255,0,0,.55); }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, var(--slot-size));
+    grid-auto-rows: var(--slot-size);
+    gap: var(--slot-gap);
+    max-height: 492px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 3px;
+}
+
+.grid::-webkit-scrollbar { width: 5px; }
+.grid::-webkit-scrollbar-thumb { background: rgba(255,48,48,.35); border-radius: 99px; }
+
+.slot {
+    position: relative;
+    background: linear-gradient(180deg, rgba(30,30,34,var(--slot-dark)), rgba(12,12,14,var(--slot-dark)));
+    border: 1px solid rgba(255,255,255,.055);
+    border-radius: var(--slot-radius);
+    display: flex; align-items: center; justify-content: center;
+}
+.slot:hover, .slot.selected { border-color: rgba(255,45,45,.75); background: linear-gradient(180deg, rgba(45,15,15,.97), rgba(14,10,10,.97)); }
+.slot img { width: 52%; height: 52%; object-fit: contain; filter: drop-shadow(0 8px 10px rgba(0,0,0,.7)); }
+.item-name { position: absolute; bottom: 6px; left: 6px; right: 6px; font-size: 10px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-count, .item-price { position: absolute; top: 5px; right: 6px; font-size: 10px; color: #ff6969; }
+.item-price { left: 6px; right: auto; color: #66ff8d; }
+
+.middle-zone { display: flex; align-items: center; justify-content: center; }
+.quick-card {
+    width: 112px;
+    padding: 9px;
+    border-radius: 14px;
+    background: rgba(8,8,10,.84);
+    border: 1px solid rgba(255,35,35,.28);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.icon-btn {
+    width: 94px; height: 42px;
+    border: 1px solid rgba(255,35,35,.24);
+    background: rgba(18,18,20,.92);
+    border-radius: 9px;
+    outline: none;
+    display: flex; align-items: center; justify-content: center;
+}
+.icon-btn:hover { background: #9b1111; border-color: #ff3838; }
+.icon-btn img { width: 23px; height: 23px; object-fit: contain; }
+#amount {
+    width: 94px; height: 34px; text-align: center; color: #fff;
+    background: rgba(12,12,14,.92);
+    border: 1px solid rgba(255,35,35,.24);
+    border-radius: 9px; outline: none;
+}
+
+.settings-panel {
+    position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+    width: 260px; padding: 16px; border-radius: 14px;
+    background: rgba(8,8,10,.96);
+    border: 1px solid rgba(255,35,35,.34);
+    box-shadow: 0 10px 35px rgba(0,0,0,.7);
+    z-index: 30;
+}
+.settings-panel h2 { margin: 0 0 12px; color: var(--rd-red); font-size: 14px; }
+.settings-panel label { display: block; font-size: 12px; color: #ddd; margin: 10px 0; }
+.settings-panel input { width: 100%; }
+.settings-panel button {
+    width: 100%; height: 32px; margin-top: 6px; border-radius: 8px;
+    border: 1px solid rgba(255,35,35,.34);
+    background: rgba(18,18,20,.92); color: #fff;
+}
+
+.clothes-side {
+    position: absolute;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%) scale(.92);
+    transform-origin: right center;
+    width: 255px;
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(5,5,7,.94);
+    border: 1px solid rgba(255,35,35,.34);
+    box-shadow: 0 14px 55px rgba(0,0,0,.85);
+    z-index: 25;
+}
+.clothes-head {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--rd-red);
+    letter-spacing: 1.4px;
+    font-size: 13px;
+}
+.clothes-head button {
+    width: 26px; height: 26px; border-radius: 7px;
+    border: 1px solid rgba(255,35,35,.3);
+    background: rgba(18,18,20,.92);
+    color: #fff;
+}
+.worn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 104px);
+    gap: 8px;
+    margin-top: 8px;
+}
+.wear-slot {
+    height: 68px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(30,30,34,.96), rgba(12,12,14,.96));
+    border: 1px dashed rgba(255,80,80,.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.wear-slot.filled {
+    border-style: solid;
+    border-color: rgba(255,45,45,.85);
+    background: rgba(120,0,0,.20);
+}
+.wear-slot img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    opacity: .9;
+}
+.mini-character {
+    width: 100px;
+    height: 190px;
+    margin: 12px auto 6px;
+    border-radius: 55px 55px 25px 25px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: radial-gradient(circle at center, rgba(130,0,0,.16), transparent 60%), rgba(255,255,255,.03);
+    position: relative;
+}
+.mini-character::before {
+    content: "";
+    position: absolute;
+    top: 14px; left: 32px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.12);
+}
+.tiny-help {
+    font-size: 10px;
+    line-height: 1.35;
+    color: #aaa;
+    text-align: center;
+    margin: 8px 0 0;
+}
+
+.context-menu {
+    position: absolute; width: 140px; padding: 8px;
+    background: rgba(8,8,10,.96);
+    border: 1px solid rgba(255,35,35,.35);
+    border-radius: 8px; box-shadow: 0 10px 35px rgba(0,0,0,.7);
+    display: flex; flex-direction: column; gap: 6px; z-index: 35;
+}
+.context-menu button {
+    height: 34px; border: 1px solid rgba(255,35,35,.25);
+    background: rgba(12,12,14,.88); color: #eee; border-radius: 7px;
+}
+.context-menu button:hover { background: #9b1111; }
+
+.hotbar {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 9px;
+    z-index: 40;
+}
+.hot-slot {
+    width: 78px;
+    height: 78px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,35,35,.35);
+    background: rgba(8,8,10,.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,.35);
+    position: relative;
+}
+.hot-slot img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+.hot-slot span {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    color: #ff4040;
+    font-size: 11px;
+}
+.slot.drop-target {
+    border-color: rgba(255,255,255,.45);
+}
+
+/* RD hotbar first row fix */
+.slot.hotbar-slot { border-color: rgba(255,48,48,.30); box-shadow: inset 0 0 0 1px rgba(255,48,48,.08); }
+.hot-num { position:absolute; top:5px; left:6px; color:#ff3030; font-size:11px; font-weight:800; z-index:2; text-shadow:0 0 8px rgba(255,0,0,.6); }
+.slot.hotbar-slot::after { content:'HOTBAR'; position:absolute; top:5px; right:6px; font-size:8px; color:rgba(255,255,255,.28); letter-spacing:.6px; }
+.hot-slot b { position:absolute; bottom:5px; left:4px; right:4px; font-size:9px; color:#ddd; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; text-align:center; font-weight:400; }
+.icon-btn img, .wear-slot img { display:block; }
+
+.text-btn {
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+.text-btn img { display: none !important; }
+
+.wear-label { position:absolute; bottom:4px; left:4px; right:4px; text-align:center; font-size:9px; color:#ddd; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.wear-slot { position:relative; }
+.wear-slot.drop-target { border-color:#fff; }
+
+/* RD exact mouse drag/drop visual feedback */
+
+.slot[draggable="true"] { cursor: grab; }
+.slot.dragging { opacity: .45; transform: scale(.96); }
+.slot.drop-target { border-color: rgba(255,255,255,.75); box-shadow: 0 0 0 1px rgba(255,255,255,.25), 0 0 18px rgba(255,48,48,.35); }
+
+/* RD deep mouse drag fix - no UI redesign */
+.rd-drag-ghost {
+    cursor: grabbing !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+body.rd-dragging, body.rd-dragging * {
+    cursor: grabbing !important;
+}
+
+
+/* RD UI GIVE modal - replaces desktop/browser prompt, no inventory redesign */
+.rd-give-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    background: rgba(0,0,0,.12);
+}
+.rd-give-modal.hidden { display: none !important; }
+.rd-give-box {
+    width: 280px;
+    padding: 14px;
+    border: 1px solid rgba(255,40,40,.75);
+    border-radius: 10px;
+    background: rgba(10,10,12,.96);
+    box-shadow: 0 0 35px rgba(255,0,0,.18);
+    text-align: center;
+}
+.rd-give-title { color:#ff3030; font-weight:900; letter-spacing:1.5px; font-size:15px; margin-bottom:4px; }
+.rd-give-sub { color:rgba(255,255,255,.65); font-size:11px; margin-bottom:10px; }
+#giveTargetId {
+    width: 100%; height: 34px; box-sizing: border-box;
+    border-radius: 7px; border: 1px solid rgba(255,40,40,.5);
+    background: rgba(0,0,0,.55); color: white; text-align: center; outline: none;
+}
+.rd-give-actions { display:flex; gap:8px; margin-top:10px; }
+.rd-give-actions button {
+    flex:1; height:32px; border-radius:7px; border:1px solid rgba(255,40,40,.55);
+    background: rgba(20,20,22,.95); color:#fff; font-weight:800; font-size:11px;
+}
+.rd-give-actions button:hover { border-color:#ff3030; box-shadow:0 0 12px rgba(255,0,0,.25); }
+
+
+/* RD red progressbar: shows under CLOTHES/quick menu while inventory is open, bottom-center when closed */
+.rd-progress {
+    position: fixed;
+    left: 50%;
+    bottom: 46px;
+    transform: translateX(-50%);
+    width: 260px;
+    padding: 10px 12px;
+    border-radius: 11px;
+    background: rgba(8,8,10,.94);
+    border: 1px solid rgba(255,35,35,.42);
+    box-shadow: 0 0 28px rgba(0,0,0,.72), 0 0 18px rgba(255,0,0,.14);
+    z-index: 100000;
+    pointer-events: none;
+}
+body.rd-inventory-open .rd-progress {
+    top: calc(50% + 238px);
+    bottom: auto;
+    width: 112px;
+    padding: 8px 9px;
+}
+.rd-progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(255,0,0,.32);
+}
+body.rd-inventory-open .rd-progress-head { font-size: 8px; margin-bottom: 5px; }
+#rdProgressLabel { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+#rdProgressPercent { color: #ff3030; font-size: 10px; }
+body.rd-inventory-open #rdProgressPercent { font-size: 8px; }
+.rd-progress-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 99px;
+    overflow: hidden;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,35,35,.20);
+}
+body.rd-inventory-open .rd-progress-track { height: 6px; }
+.rd-progress-track span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #680000, #ff3030);
+    box-shadow: 0 0 16px rgba(255,0,0,.55);
+    transition: width .08s linear;
+}
+
+.right-weight-text { margin-top: 2px; font-size: 11px; color: rgba(255,255,255,.68); }
+#rightWeightFill { width: 0%; }
+
+
+.rd-attach-modal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:80;background:rgba(0,0,0,.18);}
+.rd-attach-modal.hidden{display:none;}
+.rd-attach-box{width:360px;padding:14px;border:1px solid rgba(255,35,35,.55);border-radius:14px;background:rgba(10,10,12,.92);box-shadow:0 0 26px rgba(255,0,0,.20), inset 0 0 0 1px rgba(255,255,255,.04);}
+.rd-attach-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.rd-attach-title{font-size:15px;font-weight:900;letter-spacing:1.2px;color:#ff3030;}
+.rd-attach-sub{font-size:12px;color:rgba(255,255,255,.72);margin-top:3px;}
+#attachClose{width:34px;height:30px;border:1px solid rgba(255,45,45,.55);border-radius:8px;background:rgba(20,20,22,.95);color:white;font-weight:900;}
+.rd-attach-list{display:grid;gap:8px;max-height:300px;overflow:auto;padding-right:4px;}
+.rd-attach-item{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;padding:8px;border:1px solid rgba(255,45,45,.38);border-radius:10px;background:rgba(255,255,255,.045);color:white;text-align:left;cursor:pointer;}
+.rd-attach-item:hover{border-color:rgba(255,45,45,.85);background:rgba(255,0,0,.10);}
+.rd-attach-item img{width:38px;height:38px;object-fit:contain;}
+.rd-attach-item span{font-size:13px;font-weight:800;}
+.rd-attach-item b{font-size:12px;color:#ff5555;}
+.rd-attach-empty,.rd-attach-help{font-size:12px;color:rgba(255,255,255,.68);padding:8px;}
+.rd-attach-help{padding:10px 2px 0;text-align:center;}
+
+/* RD PRO weapon attachment table - drag attachments like qs/ox style */
+.rd-attach-box{width:min(920px,88vw)!important;min-height:560px;padding:16px!important;background:radial-gradient(circle at 60% 35%,rgba(25,75,120,.28),rgba(5,8,14,.96) 45%,rgba(6,6,8,.96))!important;border-color:rgba(40,145,255,.42)!important;box-shadow:0 0 44px rgba(0,130,255,.18), inset 0 0 0 1px rgba(255,255,255,.04)!important;}
+.rd-attach-title{color:#fff!important;text-shadow:0 0 10px rgba(0,155,255,.85);}
+.rd-attach-sub{color:rgba(120,205,255,.9)!important;}
+.rd-attach-list{display:block!important;max-height:none!important;overflow:visible!important;}
+.rd-attach-pro{position:relative;min-height:500px;}
+.rd-attach-trash{position:absolute;left:50%;top:0;transform:translateX(-50%);width:38px;height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;background:rgba(25,75,125,.78);border:1px solid rgba(70,170,255,.34);box-shadow:0 0 16px rgba(0,145,255,.28);z-index:4;}
+.rd-gun-stage{position:relative;height:285px;margin-top:28px;border-bottom:1px solid rgba(255,255,255,.08);}
+.rd-gun-shape{position:absolute;left:180px;top:90px;width:420px;height:80px;filter:drop-shadow(0 0 28px rgba(0,0,0,.7));}
+.rd-gun-barrel{position:absolute;left:0;top:28px;width:420px;height:16px;background:linear-gradient(90deg,#070707,#1b1d1f,#070707);border-radius:5px;}
+.rd-gun-body{position:absolute;left:120px;top:0;width:195px;height:70px;background:linear-gradient(135deg,#181b1d,#050506);border-radius:7px;box-shadow:inset 0 0 18px rgba(255,255,255,.04);}
+.rd-gun-grip{position:absolute;left:255px;top:62px;width:40px;height:90px;background:linear-gradient(135deg,#121416,#030303);transform:skewX(-15deg);border-radius:4px;}
+.rd-weapon-slot{position:absolute;width:78px;height:58px;border:1px solid rgba(58,154,255,.38);background:rgba(23,36,54,.72);border-radius:4px;display:flex;align-items:end;justify-content:center;padding:3px;font-size:9px;font-weight:900;color:#fff;box-shadow:0 0 22px rgba(0,127,255,.14);}
+.rd-weapon-slot.drop-target{border-color:#18a9ff;background:rgba(0,140,255,.28);box-shadow:0 0 26px rgba(0,170,255,.55);}
+.slot-scope{left:310px;top:18px}.slot-muzzle{left:40px;top:116px}.slot-flash{left:318px;top:210px}.slot-clip{left:515px;top:178px}
+.rd-gun-line{position:absolute;height:1px;background:rgba(0,117,255,.68);transform-origin:left center;box-shadow:0 0 8px rgba(0,136,255,.55)}
+.line-scope{left:365px;top:76px;width:115px;transform:rotate(45deg)}.line-muzzle{left:118px;top:143px;width:125px;transform:rotate(-14deg)}.line-flash{left:360px;top:202px;width:90px;transform:rotate(-104deg)}.line-clip{left:560px;top:190px;width:125px;transform:rotate(-22deg)}
+.rd-weapon-info{position:absolute;right:22px;top:88px;width:190px;text-align:center;color:#fff;text-shadow:0 0 12px rgba(0,157,255,.9)}
+.rd-weapon-info b{display:block;font-size:14px;margin-bottom:4px}.rd-weapon-info small{display:block;font-size:11px;color:rgba(190,230,255,.75);margin-bottom:18px}.rd-weapon-info em{display:block;font-size:11px;font-style:normal;color:#fff;border-bottom:3px solid #159dff;padding-bottom:10px;box-shadow:0 8px 12px -10px #159dff}
+.rd-attached-title,.rd-attach-title-row{font-size:12px;font-weight:900;color:#fff;margin:12px 0 7px;text-shadow:0 0 8px rgba(0,145,255,.7)}
+.rd-attached-list{display:flex;gap:8px;min-height:56px;align-items:center;}
+.rd-attached-chip,.rd-attach-card{width:74px;height:64px;border:1px solid rgba(45,143,255,.34);background:linear-gradient(180deg,rgba(22,38,60,.75),rgba(12,16,24,.8));border-radius:3px;display:grid;place-items:center;position:relative;cursor:grab;user-select:none;}
+.rd-attached-chip img,.rd-attach-card img{width:38px;height:34px;object-fit:contain}.rd-attached-chip span,.rd-attach-card span{position:absolute;bottom:3px;left:3px;right:3px;text-align:center;font-size:7px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rd-attach-card b{position:absolute;right:3px;top:2px;font-size:9px;color:#72c7ff}.rd-attach-card:hover,.rd-attached-chip:hover{border-color:#1da9ff;box-shadow:0 0 18px rgba(0,145,255,.35)}
+.rd-inv-attachments{display:flex;gap:8px;flex-wrap:wrap;min-height:80px}.rd-attach-empty.small{padding:0;color:rgba(255,255,255,.55)}
+.rd-attach-help{color:rgba(170,220,255,.75)!important;}
+
+/* RD FINAL: red/black weapon attachments + real mouse drag fallback */
+.rd-attach-modal{z-index:9999!important;}
+.rd-attach-box{width:min(920px,88vw)!important;min-height:560px!important;background:radial-gradient(circle at 58% 35%,rgba(125,0,0,.22),rgba(8,8,10,.97) 45%,rgba(0,0,0,.98))!important;border:1px solid rgba(255,35,35,.62)!important;box-shadow:0 0 44px rgba(255,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.035)!important;}
+.rd-attach-title{color:#ff3030!important;text-shadow:0 0 10px rgba(255,0,0,.85)!important;}
+.rd-attach-sub{color:rgba(255,180,180,.9)!important;}
+.rd-attach-trash{background:rgba(75,8,8,.88)!important;border:1px solid rgba(255,45,45,.65)!important;box-shadow:0 0 18px rgba(255,0,0,.34)!important;color:#fff!important;}
+.rd-attach-trash.drop-target,.rd-attach-trash.rd-drop-hover{background:rgba(255,0,0,.35)!important;border-color:#ff4040!important;box-shadow:0 0 28px rgba(255,0,0,.68)!important;}
+.rd-weapon-slot{border:1px solid rgba(255,45,45,.45)!important;background:rgba(35,12,12,.82)!important;box-shadow:0 0 22px rgba(255,0,0,.14)!important;color:#fff!important;}
+.rd-weapon-slot.drop-target,.rd-weapon-slot.rd-drop-hover{border-color:#ff3030!important;background:rgba(255,0,0,.25)!important;box-shadow:0 0 26px rgba(255,0,0,.58)!important;}
+.rd-gun-line{background:rgba(255,0,0,.72)!important;box-shadow:0 0 8px rgba(255,0,0,.68)!important;}
+.rd-weapon-info{text-shadow:0 0 12px rgba(255,0,0,.9)!important;}
+.rd-weapon-info small{color:rgba(255,185,185,.75)!important;}
+.rd-weapon-info em{border-bottom-color:#ff3030!important;box-shadow:0 8px 12px -10px #ff3030!important;}
+.rd-attached-title,.rd-attach-title-row{text-shadow:0 0 8px rgba(255,0,0,.75)!important;}
+.rd-attached-chip,.rd-attach-card{border:1px solid rgba(255,45,45,.46)!important;background:linear-gradient(180deg,rgba(45,14,14,.88),rgba(10,10,12,.92))!important;cursor:grab!important;}
+.rd-attached-chip:hover,.rd-attach-card:hover,.rd-attach-card.selected{border-color:#ff3030!important;box-shadow:0 0 20px rgba(255,0,0,.48)!important;}
+.rd-attach-card b{color:#ff5555!important;}
+.rd-attach-help{color:rgba(255,190,190,.82)!important;}
+.rd-attach-ghost{position:fixed;z-index:100000;pointer-events:none;width:76px;height:66px;border:1px solid rgba(255,45,45,.8);background:rgba(8,8,10,.94);border-radius:4px;display:grid;place-items:center;box-shadow:0 0 22px rgba(255,0,0,.55);}
+.rd-attach-ghost img{width:40px;height:34px;object-fit:contain;}
+.rd-attach-ghost span{position:absolute;bottom:3px;left:3px;right:3px;text-align:center;font-size:7px;font-weight:900;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+
+/* RD Shop checkout cash/bank UI */
+.shop-pay-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, rgba(255,30,30,.16), rgba(0,0,0,.72));
+}
+.shop-pay-card {
+    width: 380px;
+    padding: 22px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,48,48,.45);
+    background: linear-gradient(180deg, rgba(18,6,8,.98), rgba(5,5,8,.98));
+    box-shadow: 0 0 45px rgba(255,48,48,.22), 0 22px 80px rgba(0,0,0,.75);
+    text-align: center;
+}
+.shop-pay-head h2 {
+    margin: 0;
+    letter-spacing: 2px;
+    color: #fff;
+}
+.shop-pay-head p {
+    margin: 8px 0 14px;
+    color: #cfcfcf;
+    font-size: 13px;
+}
+.shop-pay-item {
+    margin: 10px 0 16px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.08);
+    color: #fff;
+    font-weight: 700;
+}
+.shop-pay-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.shop-pay-actions button, .shop-pay-cancel {
+    border: 0;
+    border-radius: 12px;
+    padding: 13px 10px;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+    background: rgba(255,48,48,.86);
+    box-shadow: 0 0 18px rgba(255,48,48,.20);
+}
+.shop-pay-actions button:hover, .shop-pay-cancel:hover { filter: brightness(1.15); }
+.shop-pay-cancel {
+    width: 100%;
+    margin-top: 10px;
+    background: rgba(255,255,255,.08);
+}
+
+
+/* RD PRO shop payment: clean 3D-style modal, no heavy background */
+.shop-pay-modal {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    pointer-events: auto;
+}
+.shop-pay-card {
+    background: rgba(10, 12, 16, 0.72) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10) !important;
+    transform: perspective(900px) rotateX(2deg) !important;
+    border-radius: 18px !important;
+}
+.shop-pay-actions button {
+    transform: perspective(600px) translateZ(0);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.38) !important;
+}
+
+/* RD PRO CLOTHES UI FIX */
+body.clothes-mode #app {
+    background: radial-gradient(circle at center, rgba(120,0,0,.25), transparent 48%), rgba(0,0,0,.82);
+}
+body.clothes-mode .settings-panel,
+body.clothes-mode .context-menu,
+body.clothes-mode .quick-card {
+    display: none !important;
+}
+body.clothes-mode .clothes-side {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    width: 980px;
+    min-height: 640px;
+    padding: 22px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(12,12,15,.98), rgba(4,4,6,.98));
+    border: 1px solid rgba(255,55,55,.48);
+    box-shadow: 0 28px 90px rgba(0,0,0,.9), inset 0 0 40px rgba(255,0,0,.04);
+    z-index: 60;
+}
+body.clothes-mode .clothes-head {
+    height: 58px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    margin-bottom: 18px;
+}
+body.clothes-mode .clothes-head span {
+    display: block;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--rd-red);
+}
+body.clothes-mode .clothes-head small {
+    display: block;
+    margin-top: 5px;
+    color: #aaa;
+    font-size: 12px;
+    letter-spacing: .4px;
+}
+body.clothes-mode .clothes-head button {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    font-size: 17px;
+}
+.clothes-layout {
+    display: grid;
+    grid-template-columns: 285px 1fr 285px;
+    gap: 24px;
+    align-items: center;
+}
+.clothes-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+body.clothes-mode .wear-slot {
+    position: relative;
+    height: 72px;
+    padding: 10px 12px;
+    justify-content: flex-start;
+    gap: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,75,75,.34);
+    background: linear-gradient(180deg, rgba(34,34,39,.98), rgba(14,14,18,.98));
+}
+body.clothes-mode .wear-slot::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 78px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255,70,70,.55), transparent);
+}
+body.clothes-mode .left-lines .wear-slot::after { right: -78px; }
+body.clothes-mode .right-lines .wear-slot::after { left: -78px; transform: rotate(180deg); }
+body.clothes-mode .wear-slot b {
+    min-width: 95px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #f2f2f2;
+}
+body.clothes-mode .wear-slot img {
+    width: 42px;
+    height: 42px;
+}
+body.clothes-mode .wear-slot .wear-label {
+    max-width: 105px;
+    font-size: 11px;
+    color: #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.wear-empty {
+    margin-left: auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.14);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,.55);
+}
+body.clothes-mode .mini-character {
+    width: 280px;
+    height: 520px;
+    margin: 0 auto;
+    border-radius: 140px 140px 60px 60px;
+    border: 1px solid rgba(255,255,255,.10);
+    background:
+        radial-gradient(circle at 50% 13%, rgba(255,255,255,.16) 0 34px, transparent 35px),
+        radial-gradient(ellipse at 50% 43%, rgba(255,255,255,.09) 0 78px, transparent 79px),
+        linear-gradient(90deg, transparent 0 22%, rgba(255,255,255,.05) 23% 27%, transparent 28% 72%, rgba(255,255,255,.05) 73% 77%, transparent 78%),
+        radial-gradient(circle at center, rgba(170,0,0,.20), rgba(255,255,255,.025));
+    box-shadow: inset 0 0 70px rgba(255,0,0,.05), 0 0 50px rgba(0,0,0,.65);
+}
+body.clothes-mode .mini-character::before {
+    display: none;
+}
+.body-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--rd-red);
+    box-shadow: 0 0 18px rgba(255,0,0,.8);
+    left: 50%;
+    transform: translateX(-50%);
+}
+.head-dot { top: 70px; }
+.chest-dot { top: 210px; }
+.hand-dot { top: 285px; left: 22%; }
+.leg-dot { top: 380px; }
+.foot-dot { top: 475px; }
+body.clothes-mode .tiny-help {
+    margin-top: 16px;
+    color: #bbb;
+    font-size: 12px;
+}
+
+
+/* RD CLOTHES RADIAL UI - screenshot style */
+body.clothes-mode #app {
+    background: rgba(0,0,0,.10) !important;
+}
+body.clothes-mode .clothes-side {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    z-index: 90 !important;
+    pointer-events: none;
+}
+body.clothes-mode .rd-clothes-radial {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(470px, 88vw);
+    height: min(720px, 90vh);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+body.clothes-mode .rd-clothes-title {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: 3px;
+    font-size: 18px;
+    text-shadow: 0 3px 12px rgba(0,0,0,.8);
+}
+body.clothes-mode .rd-clothes-sub {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    width: 520px;
+    max-width: 92vw;
+    transform: translateX(-50%);
+    text-align: center;
+    color: rgba(255,255,255,.75);
+    font-size: 11px;
+    text-shadow: 0 2px 10px rgba(0,0,0,.9);
+}
+body.clothes-mode .clothes-close-x {
+    position: absolute;
+    right: 32px;
+    top: 28px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.28);
+    background: rgba(18,18,22,.72);
+    color: #fff;
+    font-weight: 900;
+    font-size: 17px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.45);
+    pointer-events: auto;
+}
+body.clothes-mode .mini-character {
+    position: absolute !important;
+    left: 50%;
+    top: 54%;
+    width: 235px !important;
+    height: 560px !important;
+    transform: translate(-50%, -50%);
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    pointer-events: none;
+}
+body.clothes-mode .body-dot { display: none !important; }
+body.clothes-mode .wear-slot {
+    position: absolute !important;
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(180deg, rgba(126,79,245,.98), rgba(78,42,169,.98)) !important;
+    border: 2px solid rgba(255,255,255,.26) !important;
+    box-shadow: 0 8px 18px rgba(0,0,0,.45), 0 0 0 3px rgba(126,79,245,.18), inset 0 1px 0 rgba(255,255,255,.22) !important;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+body.clothes-mode .wear-slot:hover,
+body.clothes-mode .wear-slot.drop-target {
+    transform: scale(1.12) !important;
+    filter: brightness(1.18);
+    box-shadow: 0 10px 22px rgba(0,0,0,.50), 0 0 0 5px rgba(126,79,245,.28), 0 0 22px rgba(126,79,245,.55) !important;
+}
+body.clothes-mode .wear-slot.filled {
+    background: linear-gradient(180deg, rgba(139,91,255,1), rgba(96,55,201,1)) !important;
+    border-color: rgba(255,255,255,.55) !important;
+}
+body.clothes-mode .wear-slot::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 70px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, rgba(126,79,245,.78), rgba(255,255,255,.18), transparent) !important;
+    transform-origin: left center !important;
+    z-index: -1 !important;
+}
+body.clothes-mode .wear-slot img {
+    width: 24px !important;
+    height: 24px !important;
+    object-fit: contain;
+    filter: brightness(0) invert(1) drop-shadow(0 2px 3px rgba(0,0,0,.4));
+}
+body.clothes-mode .wear-slot .wear-empty {
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    border: 0 !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    background: transparent !important;
+}
+body.clothes-mode .wear-slot b { display:none !important; }
+body.clothes-mode .wear-slot .wear-label {
+    position: absolute !important;
+    left: 50% !important;
+    top: 54px !important;
+    transform: translateX(-50%) !important;
+    width: 95px !important;
+    text-align: center !important;
+    font-size: 10px !important;
+    font-weight: 800;
+    color: rgba(255,255,255,.88) !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,.9);
+    opacity: 0;
+    transition: opacity .12s ease;
+}
+body.clothes-mode .wear-slot:hover .wear-label,
+body.clothes-mode .wear-slot.filled .wear-label { opacity: 1; }
+
+/* positions like the screenshot around player body */
+body.clothes-mode .rd-pos-hat { left: 50%; top: 62px; transform: translateX(-50%); }
+body.clothes-mode .rd-pos-hat::after { width: 48px !important; transform: rotate(90deg) !important; }
+body.clothes-mode .rd-pos-mask { left: 50%; top: 145px; transform: translateX(-50%); }
+body.clothes-mode .rd-pos-mask::after { width: 38px !important; transform: rotate(90deg) !important; }
+body.clothes-mode .rd-pos-glasses { left: calc(50% + 92px); top: 127px; background: linear-gradient(180deg, rgba(150,150,155,.95), rgba(84,86,93,.95)) !important; }
+body.clothes-mode .rd-pos-glasses::after { width: 65px !important; transform: rotate(180deg) !important; }
+body.clothes-mode .rd-pos-earrings { left: calc(50% + 102px); top: 220px; }
+body.clothes-mode .rd-pos-earrings::after { width: 70px !important; transform: rotate(190deg) !important; }
+body.clothes-mode .rd-pos-chain { left: calc(50% + 112px); top: 300px; }
+body.clothes-mode .rd-pos-chain::after { width: 78px !important; transform: rotate(200deg) !important; }
+body.clothes-mode .rd-pos-watch { left: calc(50% - 173px); top: 318px; }
+body.clothes-mode .rd-pos-watch::after { width: 82px !important; transform: rotate(-18deg) !important; }
+body.clothes-mode .rd-pos-jacket { left: calc(50% - 160px); top: 210px; }
+body.clothes-mode .rd-pos-jacket::after { width: 85px !important; transform: rotate(6deg) !important; }
+body.clothes-mode .rd-pos-shirt { left: 50%; top: 255px; transform: translateX(-50%); }
+body.clothes-mode .rd-pos-shirt::after { width: 46px !important; transform: rotate(90deg) !important; }
+body.clothes-mode .rd-pos-gloves { left: calc(50% - 205px); top: 255px; }
+body.clothes-mode .rd-pos-gloves::after { width: 112px !important; transform: rotate(4deg) !important; }
+body.clothes-mode .rd-pos-bag { left: calc(50% + 138px); top: 262px; }
+body.clothes-mode .rd-pos-bag::after { width: 85px !important; transform: rotate(190deg) !important; }
+body.clothes-mode .rd-pos-pants { left: 50%; top: 505px; transform: translateX(-50%); }
+body.clothes-mode .rd-pos-pants::after { width: 70px !important; transform: rotate(90deg) !important; }
+body.clothes-mode .rd-pos-shoes { left: 50%; bottom: 42px; transform: translateX(-50%); background: linear-gradient(180deg, rgba(150,150,155,.95), rgba(84,86,93,.95)) !important; }
+body.clothes-mode .rd-pos-shoes::after { width: 55px !important; transform: rotate(-90deg) !important; }
+
+@media (max-height: 760px) {
+  body.clothes-mode .rd-clothes-radial { transform: translate(-50%, -50%) scale(.88); }
+}
+@media (max-width: 650px) {
+  body.clothes-mode .rd-clothes-radial { transform: translate(-50%, -50%) scale(.78); }
+}
+
+
+/* RD CLOTHES CAMERA UI REAL POSITIONS - updated */
+body.clothes-mode #app { background: rgba(0,0,0,.03) !important; }
+body.clothes-mode .rd-clothes-radial {
+    left: 50% !important;
+    top: 53% !important;
+    width: min(560px, 92vw) !important;
+    height: min(800px, 94vh) !important;
+}
+body.clothes-mode .rd-clothes-title { top: 12px !important; font-size: 22px !important; letter-spacing: 4px !important; }
+body.clothes-mode .rd-clothes-sub { top: 44px !important; font-size: 12px !important; }
+body.clothes-mode .wear-slot {
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+}
+body.clothes-mode .wear-slot img { width: 27px !important; height: 27px !important; }
+body.clothes-mode .rd-pos-hat { left: 50% !important; top: 80px !important; transform: translateX(-50%) !important; }
+body.clothes-mode .rd-pos-mask { left: 50% !important; top: 165px !important; transform: translateX(-50%) !important; }
+body.clothes-mode .rd-pos-glasses { left: calc(50% + 138px) !important; top: 155px !important; }
+body.clothes-mode .rd-pos-earrings { left: calc(50% + 166px) !important; top: 245px !important; }
+body.clothes-mode .rd-pos-chain { left: calc(50% + 145px) !important; top: 330px !important; }
+body.clothes-mode .rd-pos-jacket { left: calc(50% - 178px) !important; top: 250px !important; }
+body.clothes-mode .rd-pos-shirt { left: 50% !important; top: 300px !important; transform: translateX(-50%) !important; }
+body.clothes-mode .rd-pos-gloves { left: calc(50% - 218px) !important; top: 345px !important; }
+body.clothes-mode .rd-pos-watch { left: calc(50% - 170px) !important; top: 420px !important; }
+body.clothes-mode .rd-pos-bag { left: calc(50% + 180px) !important; top: 365px !important; }
+body.clothes-mode .rd-pos-pants { left: 50% !important; top: 560px !important; transform: translateX(-50%) !important; }
+body.clothes-mode .rd-pos-shoes { left: 50% !important; bottom: 42px !important; transform: translateX(-50%) !important; }
+body.clothes-mode .rd-pos-glasses::after { width: 95px !important; transform: rotate(180deg) !important; }
+body.clothes-mode .rd-pos-earrings::after { width: 98px !important; transform: rotate(192deg) !important; }
+body.clothes-mode .rd-pos-chain::after { width: 96px !important; transform: rotate(202deg) !important; }
+body.clothes-mode .rd-pos-jacket::after { width: 118px !important; transform: rotate(8deg) !important; }
+body.clothes-mode .rd-pos-gloves::after { width: 135px !important; transform: rotate(5deg) !important; }
+body.clothes-mode .rd-pos-watch::after { width: 100px !important; transform: rotate(-16deg) !important; }
+body.clothes-mode .rd-pos-bag::after { width: 105px !important; transform: rotate(190deg) !important; }
+body.clothes-mode .clothes-close-x { right: 34px !important; top: 28px !important; }
+
+
+/* RD FINAL CLOTHES CLEAR RED/BLACK UI OVERRIDE */
+body.clothes-mode #app{
+    background: radial-gradient(circle at center, rgba(120,0,0,.10), rgba(0,0,0,.04) 48%, rgba(0,0,0,.12)) !important;
+}
+body.clothes-mode .clothes-side{
+    inset:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    padding:0 !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    transform:none !important;
+    z-index:999 !important;
+    pointer-events:none !important;
+}
+body.clothes-mode .rd-clothes-radial{
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    width:760px !important;
+    height:850px !important;
+    transform:translate(-50%,-50%) !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    pointer-events:none !important;
+}
+body.clothes-mode .rd-clothes-title{
+    position:absolute !important;
+    top:18px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    color:#fff !important;
+    font-size:25px !important;
+    font-weight:1000 !important;
+    letter-spacing:5px !important;
+    text-shadow:0 3px 0 #000, 0 0 18px rgba(255,0,0,.9) !important;
+}
+body.clothes-mode .rd-clothes-sub{
+    position:absolute !important;
+    top:56px !important;
+    left:50% !important;
+    transform:translateX(-50%) !important;
+    min-width:650px !important;
+    text-align:center !important;
+    color:#ffffff !important;
+    font-size:13px !important;
+    font-weight:900 !important;
+    text-shadow:0 2px 5px #000, 0 0 10px rgba(255,0,0,.65) !important;
+}
+body.clothes-mode .clothes-close-x{
+    pointer-events:auto !important;
+    position:fixed !important;
+    right:34px !important;
+    top:30px !important;
+    width:54px !important;
+    height:54px !important;
+    border-radius:14px !important;
+    border:2px solid rgba(255,255,255,.88) !important;
+    background:linear-gradient(180deg,#e00000,#4d0000) !important;
+    color:#fff !important;
+    font-size:22px !important;
+    font-weight:1000 !important;
+    box-shadow:0 0 22px rgba(255,0,0,.65), inset 0 0 16px rgba(0,0,0,.65) !important;
+}
+body.clothes-mode .mini-character,
+body.clothes-mode .body-dot{display:none !important;}
+body.clothes-mode .wear-slot{
+    pointer-events:auto !important;
+    position:absolute !important;
+    width:66px !important;
+    height:66px !important;
+    border-radius:18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background:linear-gradient(145deg, rgba(230,0,0,.98), rgba(35,0,0,.98)) !important;
+    border:3px solid rgba(255,255,255,.92) !important;
+    box-shadow:0 0 0 4px rgba(0,0,0,.82), 0 0 28px rgba(255,0,0,.86), inset 0 0 18px rgba(0,0,0,.58) !important;
+    opacity:1 !important;
+    overflow:visible !important;
+    cursor:pointer !important;
+}
+body.clothes-mode .wear-slot.filled{
+    background:linear-gradient(145deg, #ff1111, #5b0000) !important;
+    border-color:#fff !important;
+    box-shadow:0 0 0 4px rgba(0,0,0,.88), 0 0 34px rgba(255,0,0,.95), inset 0 0 18px rgba(0,0,0,.45) !important;
+}
+body.clothes-mode .wear-slot:hover,
+body.clothes-mode .wear-slot.drop-target{
+    transform:scale(1.12) !important;
+    border-color:#fff !important;
+    background:linear-gradient(145deg, #ff2a2a, #7c0000) !important;
+    box-shadow:0 0 0 4px #000, 0 0 45px rgba(255,0,0,1) !important;
+}
+body.clothes-mode .wear-slot::after{
+    content:"" !important;
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    height:3px !important;
+    width:92px !important;
+    background:linear-gradient(90deg, rgba(255,255,255,.95), rgba(224,0,0,.95), rgba(255,255,255,.10)) !important;
+    transform-origin:left center !important;
+    box-shadow:0 0 12px rgba(255,0,0,.95), 0 1px 2px #000 !important;
+    z-index:-1 !important;
+}
+body.clothes-mode .wear-slot img{
+    width:42px !important;
+    height:42px !important;
+    object-fit:contain !important;
+    opacity:1 !important;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.95)) !important;
+}
+body.clothes-mode .wear-slot .wear-empty{
+    color:#fff !important;
+    font-size:32px !important;
+    font-weight:1000 !important;
+    line-height:1 !important;
+    text-shadow:0 2px 4px #000 !important;
+}
+body.clothes-mode .wear-slot b{display:none !important;}
+body.clothes-mode .wear-slot .wear-label{
+    position:absolute !important;
+    left:50% !important;
+    bottom:-26px !important;
+    transform:translateX(-50%) !important;
+    min-width:74px !important;
+    padding:3px 7px !important;
+    border-radius:8px !important;
+    background:rgba(0,0,0,.82) !important;
+    border:1px solid rgba(255,0,0,.65) !important;
+    color:#fff !important;
+    font-size:10px !important;
+    font-weight:900 !important;
+    text-align:center !important;
+    opacity:1 !important;
+    text-shadow:0 1px 2px #000 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+}
+/* positions around the frozen player/camera */
+body.clothes-mode .rd-pos-hat{left:50% !important;top:92px !important;transform:translateX(-50%) !important;}
+body.clothes-mode .rd-pos-hat::after{width:82px !important;transform:rotate(90deg) !important;}
+body.clothes-mode .rd-pos-mask{left:50% !important;top:185px !important;transform:translateX(-50%) !important;}
+body.clothes-mode .rd-pos-mask::after{width:50px !important;transform:rotate(90deg) !important;}
+body.clothes-mode .rd-pos-glasses{left:calc(50% + 130px) !important;top:170px !important;}
+body.clothes-mode .rd-pos-glasses::after{width:96px !important;transform:rotate(180deg) !important;}
+body.clothes-mode .rd-pos-earrings{left:calc(50% + 165px) !important;top:255px !important;}
+body.clothes-mode .rd-pos-earrings::after{width:116px !important;transform:rotate(188deg) !important;}
+body.clothes-mode .rd-pos-chain{left:calc(50% + 170px) !important;top:345px !important;}
+body.clothes-mode .rd-pos-chain::after{width:126px !important;transform:rotate(205deg) !important;}
+body.clothes-mode .rd-pos-watch{left:calc(50% - 220px) !important;top:365px !important;}
+body.clothes-mode .rd-pos-watch::after{width:136px !important;transform:rotate(-12deg) !important;}
+body.clothes-mode .rd-pos-jacket{left:calc(50% - 185px) !important;top:245px !important;}
+body.clothes-mode .rd-pos-jacket::after{width:118px !important;transform:rotate(8deg) !important;}
+body.clothes-mode .rd-pos-shirt{left:50% !important;top:315px !important;transform:translateX(-50%) !important;}
+body.clothes-mode .rd-pos-shirt::after{width:62px !important;transform:rotate(90deg) !important;}
+body.clothes-mode .rd-pos-gloves{left:calc(50% - 245px) !important;top:300px !important;}
+body.clothes-mode .rd-pos-gloves::after{width:160px !important;transform:rotate(7deg) !important;}
+body.clothes-mode .rd-pos-bag{left:calc(50% + 215px) !important;top:295px !important;}
+body.clothes-mode .rd-pos-bag::after{width:150px !important;transform:rotate(190deg) !important;}
+body.clothes-mode .rd-pos-pants{left:50% !important;top:575px !important;transform:translateX(-50%) !important;}
+body.clothes-mode .rd-pos-pants::after{width:94px !important;transform:rotate(90deg) !important;}
+body.clothes-mode .rd-pos-shoes{left:50% !important;bottom:42px !important;transform:translateX(-50%) !important;}
+body.clothes-mode .rd-pos-shoes::after{width:72px !important;transform:rotate(-90deg) !important;}
+@media (max-height: 850px){body.clothes-mode .rd-clothes-radial{transform:translate(-50%,-50%) scale(.88) !important;}}
+@media (max-width: 1200px){body.clothes-mode .rd-clothes-radial{transform:translate(-50%,-50%) scale(.82) !important;}}
+
+/* RD FINAL IDENTICAL CLOTHES UI - clear red/black layout */
+body.clothes-mode #app{
+    background: rgba(0,0,0,.08) !important;
+    display:block !important;
+    pointer-events:auto !important;
+}
+body.clothes-mode .inventory-shell,
+body.clothes-mode .settings-panel,
+body.clothes-mode .context-menu,
+body.clothes-mode .quick-card{ display:none !important; }
+body.clothes-mode .clothes-side{
+    position:fixed !important;
+    inset:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    background: rgba(0,0,0,.18) !important;
+    z-index:99999 !important;
+    pointer-events:auto !important;
+}
+body.clothes-mode .clothes-side.hidden{ display:none !important; }
+body.clothes-mode .rd-clothes-stage{
+    position:relative !important;
+    width:min(900px,92vw) !important;
+    height:min(760px,92vh) !important;
+    border-radius:42px !important;
+    background: linear-gradient(180deg, rgba(7,7,9,.78), rgba(0,0,0,.62)) !important;
+    box-shadow: 0 25px 90px rgba(0,0,0,.75), inset 0 0 0 1px rgba(255,30,30,.18) !important;
+    overflow:hidden !important;
+    backdrop-filter: blur(2px) !important;
+}
+body.clothes-mode .rd-clothes-stage:before{
+    content:""; position:absolute; inset:34px 245px 96px 245px;
+    background: radial-gradient(ellipse at center, rgba(255,0,0,.18), transparent 58%);
+    pointer-events:none;
+}
+body.clothes-mode .rd-clothes-header{
+    position:absolute; left:28px; top:26px; height:66px; min-width:265px;
+    display:flex; align-items:center; gap:16px; padding:0 26px 0 18px;
+    background:rgba(5,5,7,.82); border:2px solid #ff1717; border-right-width:1px;
+    clip-path:polygon(0 0,100% 0,93% 100%,0 100%);
+    box-shadow:0 0 18px rgba(255,0,0,.22);
+}
+body.clothes-mode .rd-hanger{font-size:36px;color:white;transform:rotate(90deg);font-weight:900;line-height:1;}
+body.clothes-mode .rd-clothes-header h2{margin:0;color:#fff;font-size:30px;letter-spacing:2px;font-weight:1000;line-height:1;}
+body.clothes-mode .rd-clothes-header p{margin:5px 0 0;color:#ddd;font-size:15px;font-weight:600;}
+body.clothes-mode .clothes-close-x{
+    position:absolute !important; right:30px !important; top:28px !important;
+    width:132px !important; height:66px !important; border-radius:0 12px 12px 0 !important;
+    background:rgba(8,8,10,.86) !important; border:2px solid #ff1717 !important; color:#fff !important;
+    display:flex !important; align-items:center !important; justify-content:center !important; gap:14px !important;
+    font-size:14px !important; font-weight:1000 !important; box-shadow:0 0 18px rgba(255,0,0,.22) !important;
+}
+body.clothes-mode .clothes-close-x b{font-size:44px;color:#ff1717;line-height:1;}
+body.clothes-mode .clothes-close-x span{font-size:15px;line-height:1.05;text-align:left;color:#fff;}
+body.clothes-mode .clothes-close-x em{font-style:normal;background:#ff1717;color:#fff;padding:2px 7px;border-radius:4px;font-size:12px;}
+body.clothes-mode .wear-slot{
+    position:absolute !important;
+    width:236px !important; height:76px !important;
+    display:flex !important; align-items:center !important;
+    background:transparent !important; border:0 !important; box-shadow:none !important;
+    border-radius:0 !important; padding:0 !important; transform:none !important;
+    cursor:pointer !important; overflow:visible !important; opacity:1 !important;
+}
+body.clothes-mode .wear-slot .rd-label{
+    width:150px;height:52px;padding:9px 14px;box-sizing:border-box;
+    border:1.7px solid rgba(255,23,23,.92); background:rgba(7,7,9,.72);
+    color:white; display:flex; flex-direction:column; justify-content:center;
+    box-shadow: inset 0 0 22px rgba(255,0,0,.08), 0 0 12px rgba(255,0,0,.12);
+}
+body.clothes-mode .wear-slot.rd-left .rd-label{border-radius:12px 0 0 12px;text-align:right;padding-right:22px;}
+body.clothes-mode .wear-slot.rd-right .rd-label{border-radius:0 12px 12px 0;text-align:left;padding-left:22px;}
+body.clothes-mode .wear-slot .rd-label b{display:block !important;font-size:20px !important;line-height:1 !important;color:#fff !important;font-weight:1000 !important;letter-spacing:.5px !important;}
+body.clothes-mode .wear-slot .rd-label span{display:block !important;margin-top:7px;font-size:13px !important;line-height:1 !important;color:#d9d9d9 !important;font-weight:600 !important;opacity:1 !important;position:static !important;transform:none !important;background:transparent !important;border:0 !important;padding:0 !important;}
+body.clothes-mode .wear-slot .rd-hex{
+    width:78px;height:78px;display:flex;align-items:center;justify-content:center;z-index:2;
+    background:linear-gradient(180deg, rgba(35,10,10,.98), rgba(5,5,7,.98));
+    border:3px solid #ff1717; clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%);
+    box-shadow:0 0 0 4px rgba(255,23,23,.28),0 0 22px rgba(255,0,0,.38), inset 0 0 28px rgba(255,0,0,.10);
+}
+body.clothes-mode .wear-slot img{width:42px !important;height:42px !important;object-fit:contain !important;filter:brightness(0) invert(1) drop-shadow(0 0 4px rgba(255,255,255,.25)) !important;display:block !important;}
+body.clothes-mode .wear-slot:after{
+    content:"" !important; position:absolute !important; top:37px !important; height:2px !important; background:#ff1717 !important;
+    box-shadow:0 0 8px rgba(255,0,0,.8) !important; opacity:.9 !important; transform:none !important;
+}
+body.clothes-mode .wear-slot:before{
+    content:"" !important; position:absolute !important; top:32px !important; width:12px !important; height:12px !important; border-radius:50% !important;
+    background:#ff1717 !important; box-shadow:0 0 10px rgba(255,0,0,.9) !important;
+}
+body.clothes-mode .wear-slot.rd-left:after{left:218px !important;width:165px !important;}
+body.clothes-mode .wear-slot.rd-left:before{left:374px !important;}
+body.clothes-mode .wear-slot.rd-right:after{right:218px !important;width:165px !important;}
+body.clothes-mode .wear-slot.rd-right:before{right:374px !important;}
+body.clothes-mode .wear-slot:hover .rd-hex,
+body.clothes-mode .wear-slot.drop-target .rd-hex{transform:scale(1.06);box-shadow:0 0 0 5px rgba(255,23,23,.35),0 0 32px rgba(255,0,0,.75) !important;}
+body.clothes-mode .wear-slot.filled .rd-hex{background:linear-gradient(180deg, rgba(90,10,10,.98), rgba(10,10,12,.98));}
+body.clothes-mode .wear-label,
+body.clothes-mode .wear-empty,
+body.clothes-mode .mini-character,
+body.clothes-mode .body-dot{display:none !important;}
+
+body.clothes-mode .rd-pos-hat{left:34px !important;top:132px !important;}
+body.clothes-mode .rd-pos-glasses{right:34px !important;top:132px !important;}
+body.clothes-mode .rd-pos-mask{left:34px !important;top:230px !important;}
+body.clothes-mode .rd-pos-shirt{right:34px !important;top:230px !important;}
+body.clothes-mode .rd-pos-chain{left:34px !important;top:328px !important;}
+body.clothes-mode .rd-pos-watch{right:34px !important;top:328px !important;}
+body.clothes-mode .rd-pos-jacket{left:34px !important;top:426px !important;}
+body.clothes-mode .rd-pos-pants{right:34px !important;top:426px !important;}
+body.clothes-mode .rd-pos-gloves{left:34px !important;top:524px !important;}
+body.clothes-mode .rd-pos-shoes{right:34px !important;top:524px !important;bottom:auto !important;}
+body.clothes-mode .rd-pos-bag{left:34px !important;top:622px !important;}
+body.clothes-mode .rd-pos-earrings{right:34px !important;top:622px !important;}
+
+body.clothes-mode .rd-clothes-help{
+    position:absolute;left:245px;bottom:26px;width:420px;height:58px;border:1.7px solid #ff1717;background:rgba(6,6,8,.82);
+    display:flex;align-items:center;gap:18px;padding:0 18px;color:#fff;box-sizing:border-box;box-shadow:0 0 14px rgba(255,0,0,.15);
+}
+body.clothes-mode .rd-clothes-help strong{font-size:18px;color:#fff;font-weight:1000;border-right:1px solid rgba(255,23,23,.7);padding-right:18px;}
+body.clothes-mode .rd-clothes-help span{font-size:12px;color:#ddd;font-weight:600;}
+body.clothes-mode .rd-clothes-esc{
+    position:absolute;right:104px;bottom:26px;width:150px;height:58px;border:1.7px solid #ff1717;background:rgba(6,6,8,.82);
+    display:flex;align-items:center;justify-content:center;gap:13px;color:#fff;box-sizing:border-box;box-shadow:0 0 14px rgba(255,0,0,.15);
+}
+body.clothes-mode .rd-clothes-esc b{border:2px solid #ff1717;color:#ff1717;border-radius:5px;padding:7px 8px;font-size:16px;line-height:1;}
+body.clothes-mode .rd-clothes-esc span{font-size:13px;font-weight:900;line-height:1.1;}
+body.clothes-mode .rd-clothes-esc small{font-size:10px;font-weight:500;color:#d7d7d7;}
+@media(max-height:820px){body.clothes-mode .rd-clothes-stage{transform:scale(.86);} }
+@media(max-width:930px){body.clothes-mode .rd-clothes-stage{transform:scale(.82);} }
+
+
+/* RD FINAL REQUEST: transparent clothes UI, live frozen player/camera visible, no black panel */
+body.clothes-mode #app{
+    background: transparent !important;
+    pointer-events:auto !important;
+}
+body.clothes-mode .clothes-side{
+    background: transparent !important;
+    backdrop-filter: none !important;
+}
+body.clothes-mode .rd-clothes-stage{
+    width: min(980px, 94vw) !important;
+    height: min(790px, 94vh) !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    overflow: visible !important;
+}
+body.clothes-mode .rd-clothes-stage:before{ display:none !important; }
+body.clothes-mode .rd-clothes-header{
+    background: rgba(0,0,0,.42) !important;
+    backdrop-filter: blur(1px) !important;
+    border-color:#ff1717 !important;
+    box-shadow:0 0 20px rgba(255,0,0,.30), inset 0 0 24px rgba(0,0,0,.55) !important;
+}
+body.clothes-mode .wear-slot .rd-label,
+body.clothes-mode .rd-clothes-help,
+body.clothes-mode .rd-clothes-esc,
+body.clothes-mode .clothes-close-x{
+    background: rgba(0,0,0,.44) !important;
+    backdrop-filter: blur(1px) !important;
+    box-shadow:0 0 16px rgba(255,0,0,.18), inset 0 0 22px rgba(0,0,0,.55) !important;
+}
+body.clothes-mode .wear-slot .rd-hex{
+    background: linear-gradient(180deg, rgba(12,12,12,.72), rgba(75,0,0,.68)) !important;
+    border-color:#ff1717 !important;
+    box-shadow:0 0 0 3px rgba(255,23,23,.22),0 0 18px rgba(255,0,0,.48), inset 0 0 20px rgba(0,0,0,.5) !important;
+}
+body.clothes-mode .wear-slot img{
+    width:46px !important;
+    height:46px !important;
+    filter:brightness(0) invert(1) drop-shadow(0 0 5px rgba(255,255,255,.35)) drop-shadow(0 2px 3px #000) !important;
+}
+body.clothes-mode .wear-slot:after{
+    background: linear-gradient(90deg, #ff1717, rgba(255,23,23,.65), transparent) !important;
+}
+/* move slots outward so they do not cover the live ped */
+body.clothes-mode .rd-pos-hat{left:12px !important;top:118px !important;}
+body.clothes-mode .rd-pos-glasses{right:12px !important;top:118px !important;}
+body.clothes-mode .rd-pos-mask{left:12px !important;top:218px !important;}
+body.clothes-mode .rd-pos-shirt{right:12px !important;top:218px !important;}
+body.clothes-mode .rd-pos-chain{left:12px !important;top:318px !important;}
+body.clothes-mode .rd-pos-watch{right:12px !important;top:318px !important;}
+body.clothes-mode .rd-pos-jacket{left:12px !important;top:418px !important;}
+body.clothes-mode .rd-pos-pants{right:12px !important;top:418px !important;}
+body.clothes-mode .rd-pos-gloves{left:12px !important;top:518px !important;}
+body.clothes-mode .rd-pos-shoes{right:12px !important;top:518px !important;bottom:auto !important;}
+body.clothes-mode .rd-pos-bag{left:12px !important;top:618px !important;}
+body.clothes-mode .rd-pos-earrings{right:12px !important;top:618px !important;}
+body.clothes-mode .wear-slot.rd-left:after{left:218px !important;width:210px !important;}
+body.clothes-mode .wear-slot.rd-left:before{left:418px !important;}
+body.clothes-mode .wear-slot.rd-right:after{right:218px !important;width:210px !important;}
+body.clothes-mode .wear-slot.rd-right:before{right:418px !important;}
+@media(max-width:1050px){body.clothes-mode .rd-clothes-stage{transform:scale(.88);} }
+@media(max-height:820px){body.clothes-mode .rd-clothes-stage{transform:scale(.86);} }
+
+/* RD FIX 2026: visible UI notifications + anti-glitch feedback */
+.rd-toast-wrap {
+    position: fixed;
+    top: 28px;
+    right: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000000;
+    pointer-events: none;
+}
+.rd-toast {
+    min-width: 250px;
+    max-width: 340px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(14, 6, 7, .96);
+    border: 1px solid rgba(255, 48, 48, .65);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,.55), 0 0 20px rgba(255,48,48,.22);
+    font-size: 12px;
+    letter-spacing: .2px;
+    transform: translateX(18px);
+    opacity: 0;
+    animation: rdToastIn .16s ease-out forwards;
+}
+.rd-toast b { display: block; color: var(--rd-red); font-size: 12px; margin-bottom: 3px; }
+.rd-toast.success { border-color: rgba(70, 255, 125, .55); }
+.rd-toast.error { border-color: rgba(255, 48, 48, .9); }
+.rd-toast.info { border-color: rgba(255, 185, 70, .65); }
+.rd-toast.out { animation: rdToastOut .18s ease-in forwards; }
+@keyframes rdToastIn { to { transform: translateX(0); opacity: 1; } }
+@keyframes rdToastOut { to { transform: translateX(18px); opacity: 0; } }
+button.rd-saving { opacity: .55; pointer-events: none; }
+body.rd-hard-closing * { pointer-events: none !important; }
+
+/* RD CLOTHES CLEAN FIX 2026-05-26
+   No black label backgrounds: keep player visible in the world.
+   Clothes UI is only side icon buttons + thin red guide lines. */
+body.clothes-mode #app{
+    background: transparent !important;
+    pointer-events: none !important;
+}
+body.clothes-mode .clothes-side{
+    position:fixed !important;
+    inset:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    transform:none !important;
+    padding:0 !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    pointer-events:none !important;
+    z-index:9998 !important;
+}
+body.clothes-mode .rd-clothes-stage{
+    position:fixed !important;
+    inset:0 !important;
+    width:100vw !important;
+    height:100vh !important;
+    transform:none !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    pointer-events:none !important;
+}
+body.clothes-mode .rd-clothes-stage:before,
+body.clothes-mode .rd-clothes-help,
+body.clothes-mode .rd-clothes-esc{
+    display:none !important;
+}
+body.clothes-mode .rd-clothes-header{
+    left:26px !important;
+    top:26px !important;
+    width:auto !important;
+    padding:8px 12px !important;
+    background:rgba(0,0,0,.36) !important;
+    border-left:4px solid #ff1717 !important;
+    border-radius:8px !important;
+    pointer-events:none !important;
+}
+body.clothes-mode .rd-clothes-header h2{font-size:25px !important;}
+body.clothes-mode .rd-clothes-header p{font-size:12px !important;}
+body.clothes-mode .clothes-close-x{
+    right:28px !important;
+    top:28px !important;
+    width:106px !important;
+    height:52px !important;
+    background:rgba(0,0,0,.42) !important;
+    border:1px solid rgba(255,23,23,.75) !important;
+    border-radius:10px !important;
+    pointer-events:auto !important;
+}
+body.clothes-mode .wear-slot{
+    width:70px !important;
+    height:70px !important;
+    background:rgba(0,0,0,.16) !important;
+    border:1px solid rgba(255,23,23,.65) !important;
+    border-radius:12px !important;
+    box-shadow:0 0 14px rgba(255,0,0,.16) !important;
+    pointer-events:auto !important;
+}
+body.clothes-mode .wear-slot .rd-label{
+    display:none !important;
+}
+body.clothes-mode .wear-slot .rd-hex{
+    position:absolute !important;
+    left:50% !important;
+    top:50% !important;
+    transform:translate(-50%,-50%) !important;
+    width:56px !important;
+    height:56px !important;
+    border-radius:10px !important;
+    border:1px solid rgba(255,255,255,.25) !important;
+    background:rgba(0,0,0,.22) !important;
+    box-shadow:none !important;
+}
+body.clothes-mode .wear-slot img{
+    width:34px !important;
+    height:34px !important;
+    filter:brightness(0) invert(1) drop-shadow(0 0 5px rgba(255,0,0,.3)) !important;
+}
+body.clothes-mode .wear-slot:after{
+    content:'' !important;
+    position:absolute !important;
+    top:50% !important;
+    height:2px !important;
+    background:rgba(255,23,23,.62) !important;
+    box-shadow:0 0 8px rgba(255,0,0,.55) !important;
+    pointer-events:none !important;
+}
+body.clothes-mode .wear-slot:before{
+    content:'' !important;
+    position:absolute !important;
+    top:calc(50% - 5px) !important;
+    width:10px !important;
+    height:10px !important;
+    border-radius:50% !important;
+    background:#ff1717 !important;
+    box-shadow:0 0 10px rgba(255,0,0,.85) !important;
+    pointer-events:none !important;
+}
+body.clothes-mode .wear-slot.rd-left:after{left:70px !important;width:160px !important;}
+body.clothes-mode .wear-slot.rd-left:before{left:224px !important;}
+body.clothes-mode .wear-slot.rd-right:after{right:70px !important;width:160px !important;}
+body.clothes-mode .wear-slot.rd-right:before{right:224px !important;}
+body.clothes-mode .wear-slot:hover,
+body.clothes-mode .wear-slot.filled{
+    background:rgba(255,0,0,.18) !important;
+    border-color:#ff1717 !important;
+}
+body.clothes-mode .wear-slot:hover .rd-hex{background:rgba(255,0,0,.20) !important;}
+body.clothes-mode .rd-pos-hat{left:28px !important;top:135px !important;right:auto !important;}
+body.clothes-mode .rd-pos-mask{left:28px !important;top:220px !important;right:auto !important;}
+body.clothes-mode .rd-pos-chain{left:28px !important;top:305px !important;right:auto !important;}
+body.clothes-mode .rd-pos-jacket{left:28px !important;top:390px !important;right:auto !important;}
+body.clothes-mode .rd-pos-gloves{left:28px !important;top:475px !important;right:auto !important;}
+body.clothes-mode .rd-pos-bag{left:28px !important;top:560px !important;right:auto !important;}
+body.clothes-mode .rd-pos-glasses{right:28px !important;top:135px !important;left:auto !important;}
+body.clothes-mode .rd-pos-shirt{right:28px !important;top:220px !important;left:auto !important;transform:none !important;}
+body.clothes-mode .rd-pos-watch{right:28px !important;top:305px !important;left:auto !important;}
+body.clothes-mode .rd-pos-pants{right:28px !important;top:390px !important;left:auto !important;transform:none !important;}
+body.clothes-mode .rd-pos-shoes{right:28px !important;top:475px !important;left:auto !important;bottom:auto !important;transform:none !important;}
+body.clothes-mode .rd-pos-earrings{right:28px !important;top:560px !important;left:auto !important;}
+@media(max-height:760px){
+  body.clothes-mode .wear-slot{width:60px !important;height:60px !important;}
+  body.clothes-mode .wear-slot .rd-hex{width:48px !important;height:48px !important;}
+  body.clothes-mode .rd-pos-hat{top:118px !important}.rd-pos-mask{top:190px !important}
+}
+
+
+
+/* RD CRAFTING PRO - red/black criminal weapon bench UI */
+.craft-app{position:fixed;inset:0;z-index:9999;display:flex;align-items:stretch;justify-content:space-between;font-family:Inter,Arial,sans-serif;color:#fff;overflow:hidden;background:radial-gradient(circle at 50% 45%,rgba(145,0,0,.34),rgba(4,4,6,.96) 62%,#010101)}
+.craft-app.hidden{display:none}.craft-bg{position:absolute;inset:0;background:linear-gradient(90deg,rgba(120,0,0,.38),transparent 22%,transparent 78%,rgba(120,0,0,.38)),repeating-radial-gradient(circle at center,rgba(255,255,255,.10) 0 2px,rgba(7,7,8,.92) 3px 15px);opacity:.82;filter:contrast(1.2)}
+.craft-side,.craft-table{position:relative;z-index:2}.craft-side{width:300px;margin:18px;background:linear-gradient(180deg,rgba(18,4,5,.96),rgba(3,3,5,.96));border:1px solid rgba(255,35,35,.38);box-shadow:0 0 38px rgba(255,0,0,.22), inset 0 0 22px rgba(255,0,0,.05);border-radius:10px;padding:14px;overflow:hidden}.craft-left{margin-right:0}.craft-right{margin-left:0}.craft-profile{display:flex;gap:10px;align-items:center;border-bottom:1px solid rgba(255,70,70,.25);padding-bottom:12px}.craft-avatar{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,#1b0000,#d90000);display:grid;place-items:center;font-weight:900;color:#fff;box-shadow:0 0 18px rgba(255,0,0,.6)}.craft-profile h3,.craft-side h3{margin:0;color:#ff3838;font-size:15px;text-shadow:0 0 12px rgba(255,0,0,.4)}.craft-profile p,.craft-side p,.craft-title p{margin:3px 0 0;font-size:11px;color:#b9b9b9}.craft-drag-help{color:#ff6a6a!important}.craft-level-card{margin:12px 0;padding:10px;background:rgba(0,0,0,.55);border:1px solid rgba(255,45,45,.25);border-radius:8px}.craft-lvl-row{display:flex;justify-content:space-between}.craft-lvl-row span{color:#fff;background:#d60000;border-radius:5px;padding:1px 8px}.craft-xp{height:8px;background:#130303;border-radius:99px;overflow:hidden;margin:8px 0}.craft-xp span{display:block;height:100%;width:0;background:linear-gradient(90deg,#6c0000,#ff2424);box-shadow:0 0 12px #ff2222}.craft-filter{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}.craft-filter button{border:1px solid rgba(255,45,45,.30);background:rgba(35,0,0,.82);color:#ffd5d5;border-radius:6px;padding:6px 8px;font-size:10px;font-weight:900}.craft-filter button.active,.craft-filter button:hover{background:#c80000;color:#fff}.craft-recipe-list{height:38vh;overflow-y:auto;padding-right:4px}.craft-attachment-list{height:calc(100vh - 96px);overflow-y:auto;padding-right:4px}.craft-card{display:flex;gap:9px;align-items:center;margin-bottom:8px;padding:9px;border:1px solid rgba(255,45,45,.22);background:linear-gradient(90deg,rgba(45,0,0,.88),rgba(7,7,9,.78));border-radius:7px;cursor:pointer;position:relative;transition:.12s}.craft-card:hover,.craft-card.active{border-color:#ff3434;box-shadow:0 0 18px rgba(255,0,0,.34);transform:translateX(2px)}.craft-card.locked{opacity:.45;filter:grayscale(.7)}.craft-card img{width:58px;height:40px;object-fit:contain}.craft-card h4{margin:0;font-size:12px;color:#fff}.craft-card p{margin:2px 0 0;font-size:10px;color:#c8a0a0}.craft-card b{position:absolute;right:8px;top:8px;font-size:10px;color:#ff6666}.craft-table{flex:1;margin:18px 0;display:flex;flex-direction:column;align-items:center;justify-content:center}.craft-title{text-align:center;position:absolute;top:14px}.craft-title h1{margin:0;font-size:24px;letter-spacing:2.5px;color:#ff3a3a;text-shadow:0 0 18px #ff0000}.craft-weapon-stage{width:min(820px,55vw);height:430px;position:relative;display:grid;place-items:center}.craft-weapon-stage img{max-width:92%;max-height:245px;object-fit:contain;filter:drop-shadow(0 24px 25px rgba(0,0,0,.8)) drop-shadow(0 0 18px rgba(255,0,0,.38))}.craft-node{position:absolute;padding:9px 12px;background:linear-gradient(180deg,rgba(100,0,0,.98),rgba(18,0,0,.98));border:1px solid rgba(255,70,70,.55);box-shadow:0 0 18px rgba(255,0,0,.34);font-size:11px;font-weight:1000;color:#fff;border-radius:5px}.node-suppressor{left:7%;top:20%}.node-scope{right:31%;top:13%}.node-tint{right:13%;top:47%}.node-clip{left:22%;bottom:22%}.node-grip{left:35%;bottom:16%}.node-flash{left:45%;bottom:24%}.node-barrel{right:17%;bottom:12%}.craft-ingredients{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:820px;min-height:92px}.craft-ing{min-width:128px;min-height:72px;display:flex;align-items:center;gap:8px;padding:9px;background:rgba(0,0,0,.76);border:2px dashed rgba(255,55,55,.52);border-radius:9px}.craft-ing.hover{background:rgba(120,0,0,.55);box-shadow:0 0 22px rgba(255,0,0,.48)}.craft-ing.wrong{animation:rdWrong .42s}.craft-ing.placed{border-style:solid;border-color:#35ff6c;box-shadow:0 0 14px rgba(40,255,100,.28)}.craft-ing.missing{border-color:#ff3333;box-shadow:0 0 12px rgba(255,40,40,.25)}.craft-ing img{width:38px;height:38px;object-fit:contain}.craft-ing b{font-size:11px;color:#fff}.craft-ing span{display:block;font-size:10px;color:#ffb1b1}.craft-slot-help{margin-top:5px;font-size:11px;color:#ff7777;letter-spacing:1px}.craft-btn{margin-top:10px;padding:14px 58px;border:1px solid #ff5959;background:linear-gradient(90deg,#600000,#e60000);box-shadow:0 0 26px rgba(255,0,0,.45);color:white;font-weight:1000;letter-spacing:2px;border-radius:8px}.craft-btn:disabled{filter:grayscale(1);opacity:.45}.craft-close{position:absolute;right:22px;top:18px;background:rgba(10,0,0,.86);border:1px solid rgba(255,80,80,.38);color:#fff;border-radius:7px;padding:8px 12px}.craft-progress{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);z-index:5;width:340px;padding:12px;background:rgba(10,0,0,.96);border:1px solid #ff4848;border-radius:8px;box-shadow:0 0 20px rgba(255,0,0,.45)}.craft-progress div{height:9px;border-radius:99px;background:#170000;overflow:hidden;margin-top:8px}.craft-progress span{display:block;height:100%;width:0;background:#ff3434}.craft-right .craft-card{padding:11px}.craft-right .craft-card img{width:48px;height:48px}.craft-inv-title{margin:10px 0 6px!important;font-size:12px!important}.craft-inventory-list{height:25vh;overflow-y:auto;border-top:1px solid rgba(255,35,35,.22);padding-top:8px}.craft-inv-item{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding:7px;border:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.55);border-radius:7px;cursor:grab}.craft-inv-item.needed{border-color:rgba(255,55,55,.48);box-shadow:inset 0 0 12px rgba(255,0,0,.08)}.craft-inv-item img{width:34px;height:34px;object-fit:contain}.craft-inv-item b{display:block;font-size:11px}.craft-inv-item span{font-size:10px;color:#ff7777}.craft-drag-ghost{position:fixed;z-index:999999;pointer-events:none;display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #ff3838;border-radius:8px;background:rgba(10,0,0,.95);box-shadow:0 0 24px rgba(255,0,0,.55);color:#fff}.craft-drag-ghost img{width:38px;height:38px;object-fit:contain}.craft-drag-ghost b{font-size:11px}@keyframes rdWrong{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}
+
+/* RD UPDATE: real selected weapon image + mounted attachments visible in slots */
+.rd-real-weapon-img{position:absolute;left:145px;top:62px;width:500px;height:205px;object-fit:contain;filter:drop-shadow(0 28px 22px rgba(0,0,0,.85)) drop-shadow(0 0 24px rgba(255,0,0,.38));z-index:1;}
+.rd-gun-shape.hidden,.rd-real-weapon-img.hidden{display:none!important;}
+.rd-weapon-slot{z-index:3;align-items:center!important;justify-content:center!important;flex-direction:column!important;text-align:center!important;gap:1px!important;overflow:hidden!important;}
+.rd-weapon-slot .rd-slot-img{width:34px;height:27px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,0,0,.45));}
+.rd-weapon-slot span{font-size:8px;line-height:10px;max-width:72px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rd-weapon-slot small{font-size:7px;font-weight:900;letter-spacing:.5px;opacity:.78;}
+.rd-weapon-slot .slot-on{color:#ff3b3b;text-shadow:0 0 8px rgba(255,0,0,.8);}
+.rd-weapon-slot .slot-empty{color:rgba(255,255,255,.45);}
+.rd-inv-attachments{max-height:128px;overflow-y:auto;padding:6px;border:1px solid rgba(255,45,45,.18);background:rgba(0,0,0,.22);border-radius:6px;}
+.rd-attached-list{max-height:74px;overflow-y:auto;}
+
+
+/* RD FIX 2026: attachments UI like crafting - selected weapon big + mounted parts only in weapon slots */
+.rd-attach-box{width:min(1020px,92vw)!important;min-height:620px!important;padding:18px!important;}
+.rd-attach-pro{min-height:555px!important;}
+.rd-gun-stage{height:360px!important;margin-top:18px!important;border-bottom:1px solid rgba(255,45,45,.20)!important;background:radial-gradient(circle at 48% 46%,rgba(150,0,0,.20),rgba(0,0,0,.05) 46%,rgba(0,0,0,.0) 70%)!important;}
+.rd-real-weapon-img{left:115px!important;top:52px!important;width:650px!important;height:265px!important;object-fit:contain!important;z-index:2!important;filter:drop-shadow(0 32px 24px rgba(0,0,0,.88)) drop-shadow(0 0 28px rgba(255,0,0,.48))!important;}
+.rd-gun-shape{left:180px!important;top:112px!important;width:520px!important;opacity:.72!important;z-index:1!important;}
+.rd-gun-barrel{width:520px!important;height:18px!important;}
+.rd-gun-body{left:158px!important;width:225px!important;height:82px!important;}
+.rd-gun-grip{left:320px!important;top:72px!important;width:48px!important;height:108px!important;}
+.slot-scope{left:390px!important;top:14px!important}.slot-muzzle{left:38px!important;top:156px!important}.slot-flash{left:410px!important;top:285px!important}.slot-clip{left:620px!important;top:230px!important}
+.line-scope{left:445px!important;top:74px!important;width:130px!important;transform:rotate(50deg)!important}.line-muzzle{left:115px!important;top:185px!important;width:150px!important;transform:rotate(-14deg)!important}.line-flash{left:455px!important;top:278px!important;width:120px!important;transform:rotate(-102deg)!important}.line-clip{left:665px!important;top:242px!important;width:145px!important;transform:rotate(-20deg)!important}
+.rd-weapon-info{right:24px!important;top:112px!important;width:210px!important;}
+.rd-weapon-slot{width:86px!important;height:64px!important;z-index:5!important;}
+.rd-weapon-slot .rd-slot-img{width:42px!important;height:34px!important;}
+.rd-weapon-slot .slot-on{color:#fff!important;background:rgba(255,0,0,.55);border-radius:3px;padding:1px 4px;text-shadow:0 0 8px rgba(255,0,0,.9)!important;}
+.rd-hidden-mounted-list{display:none!important;}
+.rd-attach-title-row{margin-top:14px!important;color:#fff!important;text-shadow:0 0 10px rgba(255,0,0,.85)!important;}
+.rd-inv-attachments{min-height:104px!important;max-height:126px!important;}
+
+/* RD FINAL: more attachment slots + drag/remove mounted attachment from weapon slot */
+.slot-grip{left:500px!important;top:292px!important}
+.slot-barrel{left:720px!important;top:88px!important}
+.slot-skin{left:760px!important;top:205px!important}
+.line-grip{left:535px!important;top:278px!important;width:110px!important;transform:rotate(-62deg)!important}
+.line-barrel{left:650px!important;top:115px!important;width:130px!important;transform:rotate(-18deg)!important}
+.line-skin{left:680px!important;top:224px!important;width:110px!important;transform:rotate(-5deg)!important}
+.rd-weapon-slot[draggable="true"]{cursor:grab!important;border-color:#ff3838!important;box-shadow:0 0 20px rgba(255,0,0,.42)!important}
+.rd-weapon-slot[draggable="true"]:after{content:'DRAG / RIGHT CLICK REMOVE';position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);font-size:7px;color:#ff8b8b;white-space:nowrap;text-shadow:0 0 6px #000;}
+.rd-attach-empty{color:#ffb0b0!important;font-weight:800!important}
+.rd-inv-attachments .rd-attach-card{margin-right:8px;margin-bottom:8px;display:inline-grid!important;vertical-align:top!important;}
+
+
+/* RD ITEM CENTER NOTIFICATION - item image when player receives items */
+.rd-item-notify-wrap{
+    position:fixed;
+    left:50%;
+    top:47%;
+    transform:translate(-50%,-50%);
+    z-index:9999999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    pointer-events:none;
+}
+.rd-item-notify{
+    position:relative;
+    min-width:300px;
+    max-width:390px;
+    height:82px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:10px 16px 10px 12px;
+    border:1px solid rgba(255,52,52,.75);
+    border-radius:14px;
+    background:linear-gradient(90deg,rgba(12,0,0,.96),rgba(78,0,0,.92),rgba(10,0,0,.96));
+    box-shadow:0 0 30px rgba(255,0,0,.48), inset 0 0 24px rgba(255,0,0,.12);
+    color:#fff;
+    opacity:0;
+    transform:translateY(18px) scale(.92);
+    overflow:hidden;
+    transition:opacity .22s ease, transform .22s ease;
+}
+.rd-item-notify.show{opacity:1;transform:translateY(0) scale(1)}
+.rd-item-notify.out{opacity:0;transform:translateY(-18px) scale(.96)}
+.rd-item-glow{
+    position:absolute;
+    inset:-30px;
+    background:radial-gradient(circle at 18% 50%,rgba(255,0,0,.38),transparent 38%);
+    animation:rdItemPulse 1.1s ease-in-out infinite alternate;
+}
+.rd-item-imgbox{
+    position:relative;
+    width:62px;
+    height:62px;
+    flex:0 0 62px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:rgba(0,0,0,.62);
+    border:1px solid rgba(255,80,80,.42);
+    box-shadow:inset 0 0 16px rgba(255,0,0,.20);
+}
+.rd-item-imgbox img{max-width:52px;max-height:52px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,0,0,.55))}
+.rd-item-info{position:relative;min-width:0;flex:1;display:flex;flex-direction:column;gap:2px;text-transform:uppercase}
+.rd-item-info b{font-size:11px;letter-spacing:1.8px;color:#ff4b4b;text-shadow:0 0 10px rgba(255,0,0,.9)}
+.rd-item-info span{font-size:17px;font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+.rd-item-count{position:relative;font-size:19px;font-weight:1000;color:#fff;background:rgba(255,0,0,.38);border:1px solid rgba(255,80,80,.55);padding:5px 10px;border-radius:10px;box-shadow:0 0 14px rgba(255,0,0,.30)}
+@keyframes rdItemPulse{from{opacity:.62;transform:scale(.98)}to{opacity:1;transform:scale(1.04)}}

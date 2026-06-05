@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>RD Inventory</title>
+    <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+    <div id="app" class="hidden">
+        <div class="inventory-shell">
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h1 id="leftTitle">PLAYER INVENTORY</h1>
+                        <p id="weightText">0 / 50 KG</p>
+                    </div>
+                    <div class="weight-bar"><span id="weightFill"></span></div>
+                </div>
+                <div class="grid" id="playerGrid"></div>
+            </section>
+
+            <section class="middle-zone">
+                <div class="quick-card">
+                    <button class="icon-btn text-btn" id="useBtn" title="Use">USE</button>
+                    <button class="icon-btn text-btn" id="giveBtn" title="Give">GIVE</button>
+                    <input id="amount" type="number" min="1" value="1" title="Amount" />
+                    <button class="icon-btn text-btn" id="dropBtn" title="Drop">DROP</button>
+                    <button class="icon-btn text-btn" id="settingsBtn" title="Inventory Settings">SETTINGS</button>
+                    <button class="icon-btn text-btn" id="clothesBtn" title="Clothes">CLOTHES</button>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h1 id="rightTitle">GROUND / SHOP</h1>
+                        <p id="rightSub">Select item</p>
+                        <p id="rightWeightText" class="right-weight-text">0.0 / 0 KG</p>
+                    </div>
+                    <div class="weight-bar"><span id="rightWeightFill"></span></div>
+                </div>
+                <div class="grid" id="otherGrid"></div>
+            </section>
+        </div>
+
+        <div id="settingsPanel" class="settings-panel hidden">
+            <h2>INVENTORY SETTINGS</h2>
+            <label>Background <input id="bgOpacity" type="range" min="30" max="90" value="68"></label>
+            <label>Slot size <input id="slotSize" type="range" min="72" max="110" value="92"></label>
+            <label>Slot gap <input id="slotGap" type="range" min="4" max="14" value="8"></label>
+            <label>Slot round <input id="slotRadius" type="range" min="0" max="16" value="7"></label>
+            <label>Red color <input id="redIntensity" type="range" min="80" max="255" value="255"></label>
+            <label>Bag / background dark <input id="bagOpacity" type="range" min="30" max="100" value="92"></label>
+            <label>Slot darkness <input id="slotDark" type="range" min="30" max="100" value="96"></label>
+            <button id="saveUi">SAVE</button>
+            <button id="resetUi">RESET</button>
+        </div>
+
+        <div id="clothesPanel" class="clothes-side hidden">
+            <div class="rd-clothes-stage">
+                <div class="rd-clothes-header">
+                    <div class="rd-hanger">〈</div>
+                    <div><h2>CLOTHES</h2><p>Zgjidh rrobat e tua</p></div>
+                </div>
+                <button id="closeClothes" class="clothes-close-x"><b>×</b><span>MBYLL<br><em>ESC</em></span></button>
+
+                <div class="wear-slot rd-pos-hat rd-left" data-cloth="hat" title="Koka"><div class="rd-label"><b>KOKA</b><span>Kapela / Kapele</span></div><div class="rd-hex"><img src="./assets/hat.svg"></div></div>
+                <div class="wear-slot rd-pos-glasses rd-right" data-cloth="glasses" title="Vath"><div class="rd-hex"><img src="./assets/glasses.svg"></div><div class="rd-label"><b>VATH</b><span>Vathë</span></div></div>
+
+                <div class="wear-slot rd-pos-mask rd-left" data-cloth="mask" title="Kufje"><div class="rd-label"><b>KUJFE</b><span>Kufje</span></div><div class="rd-hex"><img src="./assets/mask.svg"></div></div>
+                <div class="wear-slot rd-pos-shirt rd-right" data-cloth="shirt" title="Shirt"><div class="rd-hex"><img src="./assets/shirt.svg"></div><div class="rd-label"><b>SHIRT</b><span>Bluza</span></div></div>
+
+                <div class="wear-slot rd-pos-chain rd-left" data-cloth="chain" title="Varse"><div class="rd-label"><b>VARSE</b><span>Varse</span></div><div class="rd-hex"><img src="./assets/chain.svg"></div></div>
+                <div class="wear-slot rd-pos-watch rd-right" data-cloth="watch" title="Ore"><div class="rd-hex"><img src="./assets/watch.svg"></div><div class="rd-label"><b>ORE</b><span>Ore</span></div></div>
+
+                <div class="wear-slot rd-pos-jacket rd-left" data-cloth="jacket" title="Jaket"><div class="rd-label"><b>JAKET</b><span>Jaketa / Veshje</span></div><div class="rd-hex"><img src="./assets/jacket.svg"></div></div>
+                <div class="wear-slot rd-pos-pants rd-right" data-cloth="pants" title="Kembet"><div class="rd-hex"><img src="./assets/pants.svg"></div><div class="rd-label"><b>KEMBET</b><span>Pantallona</span></div></div>
+
+                <div class="wear-slot rd-pos-gloves rd-left" data-cloth="gloves" title="Doreza"><div class="rd-label"><b>DORËZA</b><span>Dorëza</span></div><div class="rd-hex"><img src="./assets/gloves.svg"></div></div>
+                <div class="wear-slot rd-pos-shoes rd-right" data-cloth="shoes" title="Shoes"><div class="rd-hex"><img src="./assets/shoes.svg"></div><div class="rd-label"><b>SHOES</b><span>Këpucë</span></div></div>
+
+                <div class="wear-slot rd-pos-bag rd-left" data-cloth="bag" title="Çanta"><div class="rd-label"><b>ÇANTA</b><span>Çanta</span></div><div class="rd-hex"><img src="./assets/bag.svg"></div></div>
+                <div class="wear-slot rd-pos-earrings rd-right" data-cloth="earrings" title="Aksesor"><div class="rd-hex"><img src="./assets/earrings.svg"></div><div class="rd-label"><b>AKSESOR</b><span>Aksesor</span></div></div>
+
+                <div class="rd-clothes-help"><strong>ⓘ PËRDOR</strong><span>Kliko mbi një ikonë për të ndryshuar rrobat</span></div>
+                <div class="rd-clothes-esc"><b>ESC</b><span>MBYLL<br><small>Mbyll menynë</small></span></div>
+            </div>
+        </div>
+
+        
+        <div id="giveModal" class="rd-give-modal hidden">
+            <div class="rd-give-box">
+                <div class="rd-give-title">GIVE ITEM</div>
+                <div class="rd-give-sub">Shkruaj ID e lojtarit</div>
+                <input id="giveTargetId" type="number" min="1" placeholder="Player ID" />
+                <div class="rd-give-actions">
+                    <button id="giveConfirm">GIVE</button>
+                    <button id="giveCancel">CANCEL</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="attachModal" class="rd-attach-modal hidden">
+            <div class="rd-attach-box">
+                <div class="rd-attach-head">
+                    <div>
+                        <div class="rd-attach-title">WEAPON ATTACHMENTS</div>
+                        <div id="attachWeapon" class="rd-attach-sub">Select attachment</div>
+                    </div>
+                    <button id="attachClose">X</button>
+                </div>
+                <div id="attachList" class="rd-attach-list"></div>
+                <div class="rd-attach-help">Kliko attachment sa here te duash per ta vendosur ne armen qe ke.</div>
+            </div>
+        </div>
+
+        <div id="hotbar" class="hotbar hidden">
+            <div class="hot-slot" data-hotbar="1">1</div>
+            <div class="hot-slot" data-hotbar="2">2</div>
+            <div class="hot-slot" data-hotbar="3">3</div>
+            <div class="hot-slot" data-hotbar="4">4</div>
+            <div class="hot-slot" data-hotbar="5">5</div>
+        </div>
+
+
+        <div id="shopPayModal" class="shop-pay-modal hidden">
+            <div class="shop-pay-card">
+                <div class="shop-pay-head">
+                    <h2>CHECKOUT</h2>
+                    <p id="shopPayText">Choose payment method</p>
+                </div>
+                <div class="shop-pay-item" id="shopPayItem">Item</div>
+                <div class="shop-pay-actions">
+                    <button id="shopPayCash">💵 CASH</button>
+                    <button id="shopPayBank">💳 BANK</button>
+                </div>
+                <button id="shopPayCancel" class="shop-pay-cancel">CANCEL</button>
+            </div>
+        </div>
+
+        <div id="contextMenu" class="context-menu hidden">
+            <button data-action="use">Use</button>
+            <button data-action="give">Give</button>
+            <button data-action="drop">Drop</button>
+            <button data-action="buy">Buy</button>
+        </div>
+    </div>
+
+    <div id="rdProgress" class="rd-progress hidden">
+        <div class="rd-progress-head">
+            <span id="rdProgressLabel">WORKING</span>
+            <b id="rdProgressPercent">0%</b>
+        </div>
+        <div class="rd-progress-track"><span id="rdProgressFill"></span></div>
+    </div>
+
+
+
+    <div id="craftApp" class="craft-app hidden">
+        <div class="craft-bg"></div>
+        <aside class="craft-side craft-left">
+            <div class="craft-profile">
+                <div class="craft-avatar">RD</div>
+                <div><h3 id="craftPlayerName">YOUR GUNS</h3><p>Choose weapon / item to craft</p><p class="craft-drag-help">Drag materials from inventory into red slots.</p></div>
+            </div>
+            <div class="craft-level-card">
+                <div class="craft-lvl-row"><b>Craft Level</b><span id="craftLevel">1</span></div>
+                <div class="craft-xp"><span id="craftXpFill"></span></div>
+                <small id="craftXpText">0 / 100 XP</small>
+            </div>
+            <div class="craft-filter">
+                <button data-cat="all" class="active">ALL</button><button data-cat="weapons">GUNS</button><button data-cat="attachments">ATTACH</button><button data-cat="ammo">AMMO</button><button data-cat="tools">TOOLS</button>
+            </div>
+            <div id="craftRecipeList" class="craft-recipe-list"></div><h3 class="craft-inv-title">YOUR ITEMS</h3><div id="craftInventoryList" class="craft-inventory-list"></div>
+        </aside>
+
+        <main class="craft-table">
+            <div class="craft-title"><h1 id="craftBenchTitle">CRAFTING TABLE</h1><p>MODIFY YOUR ITEMS OR CRAFT NEW ITEMS</p></div>
+            <div class="craft-weapon-stage">
+                <img id="craftMainImage" src="" alt="weapon" />
+                <div class="craft-node node-suppressor">SUPPRESSOR</div><div class="craft-node node-scope">SCOPE</div><div class="craft-node node-tint">TINT</div>
+                <div class="craft-node node-clip">CLIP</div><div class="craft-node node-grip">GRIP</div><div class="craft-node node-flash">FLASH</div><div class="craft-node node-barrel">BARREL</div>
+            </div>
+            <div id="craftIngredients" class="craft-ingredients"></div><div class="craft-slot-help">HOLD MOUSE AND DROP MATERIALS HERE</div>
+            <button id="craftButton" class="craft-btn">CRAFT</button>
+            <button id="craftClose" class="craft-close">ESC CLOSE</button>
+        </main>
+
+        <aside class="craft-side craft-right">
+            <h3>YOUR ATTACHMENTS</h3><p>Drag or craft attachments/tints for your guns.</p>
+            <div id="craftAttachmentList" class="craft-attachment-list"></div>
+        </aside>
+
+        <div id="craftProgress" class="craft-progress hidden"><b id="craftProgressLabel">CRAFTING</b><div><span id="craftProgressFill"></span></div></div>
+    </div>
+
+    <script src="./assets/app.js"></script>
+</body>
+</html>
